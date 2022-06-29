@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class User {
+public class Attorney {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +18,10 @@ public class User {
     @JsonIgnore
     Set<Client> clients;
 
-    public User() {
+    public Attorney() {
     }
 
-    public User(Long id, String name, Integer billingRate) {
+    public Attorney(Long id, String name, Integer billingRate) {
         this.id = id;
         this.name = name;
         this.billingRate = billingRate;

@@ -1,7 +1,7 @@
 package com.timesheettracker.timesheettracker.controllers;
 
 
-import com.timesheettracker.timesheettracker.models.User;
+import com.timesheettracker.timesheettracker.models.Attorney;
 import com.timesheettracker.timesheettracker.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,8 +14,8 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/attorney")
+public class AttorneyController {
 
     @Autowired
     private UserRepository userRepository;
@@ -26,8 +26,8 @@ public class UserController {
 
 
     @PostMapping("/")
-    public ResponseEntity<User> createUser(@RequestBody User newUser){
-        User user = userRepository.save(newUser);
+    public ResponseEntity<Attorney> createUser(@RequestBody Attorney newUser){
+        Attorney user = userRepository.save(newUser);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -35,14 +35,14 @@ public class UserController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers(){
-        List<User> users = userRepository.findAll();
+        List<Attorney> users = userRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOneUser(@PathVariable Long id){
 
-        Optional<User> maybeUser = userRepository.findById(id);
+        Optional<Attorney> maybeUser = userRepository.findById(id);
 
         if (maybeUser.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);

@@ -18,7 +18,7 @@ public class Client {
 
     @ManyToMany
     @JsonIgnore
-    Set<User> users;
+    Set<Attorney> users;
 
 
 
