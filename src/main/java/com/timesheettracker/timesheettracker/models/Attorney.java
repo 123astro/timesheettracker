@@ -12,26 +12,26 @@ public class Attorney {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Integer billingRate;
+    private Float billingRate;
 
-    @ManyToMany
+    @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
     @JsonIgnore
-    Set<Client> clients;
+    private Set<Client> clients;
 
     public Attorney() {
     }
 
-    public Attorney(Long id, String name, Integer billingRate) {
+    public Attorney(Long id, String name, Float billingRate) {
         this.id = id;
         this.name = name;
         this.billingRate = billingRate;
     }
 
-    public Integer getBillingRate() {
+    public Float getBillingRate() {
         return billingRate;
     }
 
-    public void setBillingRate(Integer billingRate) {
+    public void setBillingRate(Float billingRate) {
         this.billingRate = billingRate;
     }
 

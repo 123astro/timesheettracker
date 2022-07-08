@@ -1,5 +1,7 @@
 package com.timesheettracker.timesheettracker.models;
 
+
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -16,15 +18,18 @@ public class Client {
     private String contactName;
     private String phoneNumber;
 
-    @ManyToMany
-    @JsonIgnore
-    Set<Attorney> users;
 
+    @ManyToOne
+    @JoinColumn(name = "attorney_id", referencedColumnName = "id")
+    private Attorney attorney;
+
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Matter> matters;
 
 
     public Client() {
     }
-
 
     public Client(Long id, String companyName, String contactName, String phoneNumber) {
         this.id = id;
@@ -65,6 +70,11 @@ public class Client {
         this.contactName = contactName;
     }
 
+    public Attorney getAttorney() {
+        return attorney;
+    }
 
-
+    public void setAttorney(Attorney attorney) {
+        this.attorney = attorney;
+    }
 }

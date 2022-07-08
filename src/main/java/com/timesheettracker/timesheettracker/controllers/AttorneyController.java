@@ -2,7 +2,7 @@ package com.timesheettracker.timesheettracker.controllers;
 
 
 import com.timesheettracker.timesheettracker.models.Attorney;
-import com.timesheettracker.timesheettracker.repositories.UserRepository;
+import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.Optional;
 public class AttorneyController {
 
     @Autowired
-    private UserRepository userRepository;
+    private AttorneyRepository userRepository;
 
     @GetMapping("/test")
     public ResponseEntity<?> testRoute() { return new ResponseEntity<>("Hello" , HttpStatus.OK);}

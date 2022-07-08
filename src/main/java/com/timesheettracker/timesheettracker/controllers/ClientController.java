@@ -1,8 +1,10 @@
 package com.timesheettracker.timesheettracker.controllers;
 
 
+import com.timesheettracker.timesheettracker.models.Attorney;
 import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
+import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,16 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @PostMapping("/")
-    public ResponseEntity<?> createNewClient(@RequestBody Client newClient){
+    @Autowired
+    private AttorneyRepository attorneyRepository;
+
+    @PostMapping("/{attorneyID}")
+    public ResponseEntity<?> createNewClient(@PathVariable ("attorneyID") Long id, @RequestBody Client newClient){
+        Optional<Attorney> maybeAttorney = attorneyRepository.findById(id);
+        if (maybeAttorney.isEmpty()) {
+            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
+        }
+        newClient.setAttorney(maybeAttorney.get());
         Client client = clientRepository.save(newClient);
                 return new ResponseEntity<>(client, HttpStatus.OK);
     }
