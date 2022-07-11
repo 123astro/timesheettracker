@@ -20,9 +20,10 @@ public class Matter {
     public Matter() {
     }
 
-    public Matter(Long id, String matterName) {
+    public Matter(Long id, String matterName, Client client) {
         this.id = id;
         this.matterName = matterName;
+        this.client = client;
     }
 
     public Long getId() {
