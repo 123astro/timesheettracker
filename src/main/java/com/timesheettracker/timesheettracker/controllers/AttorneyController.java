@@ -2,7 +2,9 @@ package com.timesheettracker.timesheettracker.controllers;
 
 
 import com.timesheettracker.timesheettracker.models.Attorney;
+import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
+import com.timesheettracker.timesheettracker.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,10 @@ import java.util.Optional;
 public class AttorneyController {
 
     @Autowired
-    private AttorneyRepository userRepository;
+    private AttorneyRepository attorneyRepository;
+
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/test")
     public ResponseEntity<?> testRoute() { return new ResponseEntity<>("Hello" , HttpStatus.OK);}
@@ -27,7 +32,7 @@ public class AttorneyController {
 
     @PostMapping("/")
     public ResponseEntity<Attorney> createUser(@RequestBody Attorney newUser){
-        Attorney user = userRepository.save(newUser);
+        Attorney user = attorneyRepository.save(newUser);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
@@ -35,18 +40,23 @@ public class AttorneyController {
 
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers(){
-        List<Attorney> users = userRepository.findAll();
+        List<Attorney> users = attorneyRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOneUser(@PathVariable Long id){
 
-        Optional<Attorney> maybeUser = userRepository.findById(id);
+        Optional<Attorney> maybeUser = attorneyRepository.findById(id);
 
         if (maybeUser.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(maybeUser.get(), HttpStatus.OK);
     }
+
+
+
+
+
 }

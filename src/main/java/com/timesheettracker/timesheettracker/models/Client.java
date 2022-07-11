@@ -31,11 +31,13 @@ public class Client {
     public Client() {
     }
 
-    public Client(Long id, String companyName, String contactName, String phoneNumber) {
+    public Client(Long id, String companyName, String contactName, String phoneNumber, Attorney attorney, Set<Matter> matters) {
         this.id = id;
         this.companyName = companyName;
         this.contactName = contactName;
         this.phoneNumber = phoneNumber;
+        this.attorney = attorney;
+        this.matters = matters;
     }
 
     public String getPhoneNumber() {

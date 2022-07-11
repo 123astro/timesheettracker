@@ -21,18 +21,11 @@ public class Attorney {
     public Attorney() {
     }
 
-    public Attorney(Long id, String name, Float billingRate) {
+    public Attorney(Long id, String name, Float billingRate, Set<Client> clients) {
         this.id = id;
         this.name = name;
         this.billingRate = billingRate;
-    }
-
-    public Float getBillingRate() {
-        return billingRate;
-    }
-
-    public void setBillingRate(Float billingRate) {
-        this.billingRate = billingRate;
+        this.clients = clients;
     }
 
     public Long getId() {
@@ -49,5 +42,21 @@ public class Attorney {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Float getBillingRate() {
+        return billingRate;
+    }
+
+    public void setBillingRate(Float billingRate) {
+        this.billingRate = billingRate;
+    }
+
+    public Set<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 }
