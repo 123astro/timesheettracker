@@ -18,11 +18,12 @@ public class Client {
     private String contactName;
     private String phoneNumber;
 
-
+    //clients
     @ManyToOne
     @JoinColumn(name = "attorney_id", referencedColumnName = "id")
     private Attorney attorney;
 
+    //matters
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Matter> matters;

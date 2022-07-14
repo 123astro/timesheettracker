@@ -14,6 +14,7 @@ public class Attorney {
     private String name;
     private Float billingRate;
 
+    // One attorney with many clients
     @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Client> clients;
@@ -21,8 +22,7 @@ public class Attorney {
     public Attorney() {
     }
 
-    public Attorney(Long id, String name, Float billingRate, Set<Client> clients) {
-        this.id = id;
+    public Attorney(String name, Float billingRate, Set<Client> clients) {
         this.name = name;
         this.billingRate = billingRate;
         this.clients = clients;
