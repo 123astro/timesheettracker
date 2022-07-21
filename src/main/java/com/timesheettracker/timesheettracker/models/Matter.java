@@ -1,6 +1,9 @@
 package com.timesheettracker.timesheettracker.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 
@@ -15,7 +18,9 @@ public class Matter {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     private Client client;
 
-
+    @OneToMany(mappedBy = "matter", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Action> Action;
 
     public Matter() {
     }
