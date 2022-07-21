@@ -1,7 +1,9 @@
 package com.timesheettracker.timesheettracker.models;
+import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import org.springframework.util.StopWatch;
 
 import javax.persistence.*;
+import java.util.concurrent.TimeUnit;
 
 @Entity
 public class Action {
@@ -10,7 +12,7 @@ public class Action {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String actionName;
-    private long time;
+    private Long time = 0L;
 
     @ManyToOne
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
@@ -19,10 +21,10 @@ public class Action {
     public Action() {
     }
 
-    public Action(Long id, String actionName, long time, Client matter) {
+    public Action(Long id, String actionName, Long time, Client matter) {
         this.id = id;
         this.actionName = actionName;
-        this.time = 0;
+        this.time = time;
         this.matter = matter;
     }
 
@@ -42,6 +44,14 @@ public class Action {
         this.actionName = actionName;
     }
 
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time += time;
+    }
+
     public Client getMatter() {
         return matter;
     }
@@ -50,27 +60,30 @@ public class Action {
         this.matter = matter;
     }
 
-
-    public long getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public void startTimer(){
+    public Long startTimer() throws InterruptedException {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        System.out.println("Timer");
-        System.out.println("Timer");
-        System.out.println("Timer");
+        System.out.println("Timer Started");
+        TimeUnit.SECONDS.sleep(3);
         stopWatch.stop();
-        setTime((int) stopWatch.getTotalTimeNanos());
-        System.out.println(stopWatch.getTotalTimeNanos());
+        System.out.println("Timer Ended");
+        Long timer = (long) stopWatch.getTotalTimeSeconds();
+        setTime(timer);
+        System.out.println(stopWatch.getTotalTimeSeconds());
+        return timer;
     }
 
-//    public void stopTimer(){
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"actionName\":\"" + actionName + '"' +
+                ", \"time\":" + time +
+                ", \"matter\":" + matter +
+                '}';
+    }
+
+    //    public void stopTimer(){
 //        StopWatch stopWatch = new StopWatch();
 //        stopWatch.stop();
 //        System.out.println(stopWatch.getTotalTimeMillis());
