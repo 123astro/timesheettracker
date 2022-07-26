@@ -17,17 +17,16 @@ public class Action {
 
     @ManyToOne
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
-    private Client matter;
+    private Matter matter;
 
     public Action() {
     }
 
-    public Action(Long id, String actionName, Long time, Client matter) {
+    public Action(Long id, String actionName, Long time, Matter matter) {
         this.id = id;
         this.actionName = actionName;
         this.time = time;
         this.matter = matter;
-       // this.stopWatch = stopWatch;
     }
 
     public Long getId() {
@@ -55,13 +54,14 @@ public class Action {
         //this.time += time;
     }
 
-    public Client getMatter() {
+    public Matter getMatter() {
         return matter;
     }
 
-    public void setMatter(Client matter) {
+    public void setMatter(Matter matter) {
         this.matter = matter;
     }
+// public void setMatterID(Long matter) {this.matter}
 
     public Long startTimer() throws InterruptedException {
         StopWatch stopWatch = new StopWatch();

@@ -20,7 +20,7 @@ public class Matter {
 
     @OneToMany(mappedBy = "matter", fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Action> Action;
+    private Set<Action> actions;
 
     public Matter() {
     }
