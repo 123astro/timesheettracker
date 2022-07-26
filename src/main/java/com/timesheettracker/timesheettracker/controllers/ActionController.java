@@ -3,6 +3,7 @@ package com.timesheettracker.timesheettracker.controllers;
 
 import com.timesheettracker.timesheettracker.models.Action;
 import com.timesheettracker.timesheettracker.models.Client;
+import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
@@ -34,18 +35,18 @@ public class ActionController {
     @Autowired
     private ActionRepository actionRepository;
 
+    //adds time to a matter {"actionName": "phone call",  "matter": { "id": 4 }}
     @PostMapping("/start/matterID/{matterID}")
     public ResponseEntity<Action> startTimer(@RequestBody Action newAction,
-                                             @PathVariable ("matterID") Client id ) throws InterruptedException {
+                                             @PathVariable ("matterID") Matter id ) throws InterruptedException {
         //if id already exist, add time to it
-
         Action action = actionRepository.save(newAction);
         System.out.println(actionRepository.getReferenceById(action.getId()));
         Long addTime = action.startTimer();
         System.out.println("add time: " + addTime);
         System.out.println(actionRepository.getReferenceById(action.getId()));
-        //actionRepository.getReferenceById(action.getId()).setMatter(id);
-        actionRepository.save(newAction);
+        action.setMatter(id);
+        actionRepository.save(action);
         return new ResponseEntity<>(action, HttpStatus.CREATED);
     }
 

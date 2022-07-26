@@ -61,7 +61,6 @@ public class Action {
     public void setMatter(Matter matter) {
         this.matter = matter;
     }
-// public void setMatterID(Long matter) {this.matter}
 
     public Long startTimer() throws InterruptedException {
         StopWatch stopWatch = new StopWatch();
