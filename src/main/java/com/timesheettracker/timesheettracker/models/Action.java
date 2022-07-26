@@ -13,6 +13,7 @@ public class Action {
     private Long id;
     private String actionName;
     private Long time = 0L;
+    //private static StopWatch stopWatch = new StopWatch();
 
     @ManyToOne
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
@@ -26,6 +27,7 @@ public class Action {
         this.actionName = actionName;
         this.time = time;
         this.matter = matter;
+       // this.stopWatch = stopWatch;
     }
 
     public Long getId() {
@@ -49,7 +51,8 @@ public class Action {
     }
 
     public void setTime(Long time) {
-        this.time += time;
+        this.time = time;
+        //this.time += time;
     }
 
     public Client getMatter() {

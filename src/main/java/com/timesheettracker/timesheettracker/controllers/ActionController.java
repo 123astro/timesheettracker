@@ -6,21 +6,20 @@ import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
 import com.timesheettracker.timesheettracker.repositories.MatterRepository;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.persistence.Id;
-import java.sql.SQLException;
 import java.util.Optional;
+
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/action")
 
 public class ActionController {
+
+
 
     @Autowired
     private AttorneyRepository attorneyRepository;
@@ -34,8 +33,8 @@ public class ActionController {
     @Autowired
     private ActionRepository actionRepository;
 
-    @PostMapping("/start")
-    public ResponseEntity<Action> startTimer(@RequestBody Action newAction) throws InterruptedException {
+    @PostMapping("/start/{matterId}")
+    public ResponseEntity<Action> startTimer(@RequestBody Action newAction ) throws InterruptedException {
         //if id already exist, add time to it
         Action action = actionRepository.save(newAction);
         Long addTime = action.startTimer();
@@ -45,18 +44,37 @@ public class ActionController {
     }
 
 
-    @PostMapping("/start/{id}")
-    public ResponseEntity<Action> addTime(@RequestBody Action newAction, @PathVariable Long id) throws InterruptedException {
-        //if id already exist, add time to it
-        Action action = actionRepository.save(newAction);
-        Long sqlTime = actionRepository.getReferenceById(id).getTime();
-        System.out.println("Print sqlTime ~3 :" + sqlTime);
-        long addTime = action.startTimer();
-        System.out.println("add time: " + addTime);
-        actionRepository.getReferenceById(id).setTime(addTime);
-        actionRepository.save(newAction);
-        return new ResponseEntity<>(action, HttpStatus.CREATED);
+//    @PostMapping("/start/{id}")
+//    public ResponseEntity<Action> addTime(@RequestBody Action newAction, @PathVariable Long id) throws InterruptedException {
+//        //if id already exist, add time to it
+//        //System.out.println("first" + getSqlTime(id));
+//        Action action = actionRepository.save(newAction);
+//        System.out.println(action);
+//        System.out.println(getSqlTime(id));
+//        Long sqlTime = actionRepository.getReferenceById(id).getTime();
+//        System.out.println("Print sqlTime ~3 :" + sqlTime);
+//        long addTime = action.startTimer();
+//        System.out.println("add time: " + addTime);
+//        actionRepository.getReferenceById(id).setTime(addTime);
+//        actionRepository.save(newAction);
+//        return new ResponseEntity<>(action, HttpStatus.CREATED);
+//    }
+
+
+    public Long getSqlTime(Long id){
+        return actionRepository.getReferenceById(id).getTime();
     }
+
+   @PostMapping("/start/{id}")
+   public ResponseEntity<?> addTime(@PathVariable Long id) throws InterruptedException {Action action = new Action();
+       Long mysqlTime = actionRepository.getReferenceById(id).getTime();
+       action.startTimer();
+       actionRepository.getReferenceById(id).setTime((mysqlTime + action.getTime()));
+       actionRepository.save(action);
+       return new ResponseEntity<>(action, HttpStatus.CREATED);
+   }
+
+
 
 //    @PostMapping("/stop")
 //    public ResponseEntity<Action> stopTimer(@RequestBody Action newAction){

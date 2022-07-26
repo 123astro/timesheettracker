@@ -17,7 +17,6 @@ import java.util.Optional;
 @CrossOrigin
 @RestController
 
-
 @RequestMapping("/api/client")
 public class ClientController {
 
@@ -28,14 +27,14 @@ public class ClientController {
     private AttorneyRepository attorneyRepository;
 
     @PostMapping("/{attorneyID}")
-    public ResponseEntity<?> createNewClient(@PathVariable ("attorneyID") Long id, @RequestBody Client newClient){
+    public ResponseEntity<?> createNewClient(@PathVariable("attorneyID") Long id, @RequestBody Client newClient) {
         Optional<Attorney> maybeAttorney = attorneyRepository.findById(id);
         if (maybeAttorney.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
         }
         newClient.setAttorney(maybeAttorney.get());
         Client client = clientRepository.save(newClient);
-                return new ResponseEntity<>(client, HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @GetMapping("/")
@@ -45,7 +44,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getClientByID(@PathVariable Long id){
+    public ResponseEntity<?> getClientByID(@PathVariable Long id) {
         Optional<Client> maybeClient = clientRepository.findById(id);
         if (maybeClient.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
@@ -53,6 +52,10 @@ public class ClientController {
         return new ResponseEntity<>(maybeClient.get(), HttpStatus.OK);
 
     }
+
+    ;
+
+    // ADD CODE =>  IF client already exist, attorney can not use that client.
 
 
 }

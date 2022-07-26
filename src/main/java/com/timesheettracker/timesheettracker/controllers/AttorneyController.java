@@ -15,7 +15,6 @@ import java.util.Optional;
 
 @CrossOrigin
 @RestController
-
 @RequestMapping("/api/attorney")
 public class AttorneyController {
 
@@ -26,14 +25,12 @@ public class AttorneyController {
     private ClientRepository clientRepository;
 
     @GetMapping("/test")
-    public ResponseEntity<?> testRoute() { return new ResponseEntity<>("Hello" , HttpStatus.OK);}
-
-
+    public ResponseEntity<?> testRoute() { return new ResponseEntity<>("We are connected to the timesheets database!" ,
+            HttpStatus.OK);}
 
     @PostMapping("/")
     public ResponseEntity<Attorney> createUser(@RequestBody Attorney newUser){
         Attorney user = attorneyRepository.save(newUser);
-
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
@@ -54,9 +51,5 @@ public class AttorneyController {
         }
         return new ResponseEntity<>(maybeUser.get(), HttpStatus.OK);
     }
-
-
-
-
 
 }
