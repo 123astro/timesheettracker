@@ -55,12 +55,9 @@ public class MatterController {
 
 
     //create a method that returns all matters associated with a client_id.
-//    @GetMapping("/client/{clientID}")
-//    public ResponseEntity<?> getMatterFromClient(@PathVariable("clientID") Long id){
-//
-//        if (client.isEmpty()) {
-//            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(client, HttpStatus.OK);
-//    }
+    @GetMapping("/client/{clientID}")
+    public ResponseEntity<?> getMatterFromClient(@PathVariable("clientID") Long id){
+       List<Matter>  matters =  matterRepository.findAllByClient_id(id);
+        return new ResponseEntity<>(matters, HttpStatus.OK);
+    }
 }
