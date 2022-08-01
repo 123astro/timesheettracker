@@ -53,7 +53,12 @@ public class ClientController {
 
     }
 
-    ;
+    @GetMapping("/attorney/{attorneyId}")
+    public ResponseEntity<?> getClientsByAttorneyID(@PathVariable ("attorneyId") Long id) {
+        List<Client> clients= clientRepository.findAllByAttorney_id(id);
+        return new ResponseEntity<>(clients, HttpStatus.OK);
+    }
+
 
     // ADD CODE =>  IF client already exist, attorney can not use that client.
 
