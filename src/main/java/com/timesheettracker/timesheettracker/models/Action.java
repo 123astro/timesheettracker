@@ -12,7 +12,7 @@ public class Action {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String actionName;
-    private Long time = 0L;
+    public Long time = 0L;
     //private static StopWatch stopWatch = new StopWatch();
 
     @ManyToOne
