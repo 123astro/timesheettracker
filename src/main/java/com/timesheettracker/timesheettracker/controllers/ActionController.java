@@ -39,16 +39,10 @@ public class ActionController {
     public ResponseEntity<?> startTimer(@RequestBody Action newAction,
                                              @PathVariable ("actionID") Long id ) throws InterruptedException {
         //if id already exist, add time to it
-        Optional <Action> dataBaseTime = actionRepository.findById(id);
-        Long oldTime2 =  dataBaseTime.get().time;
-        System.out.println("Old time " + oldTime2);
+        Long dataBaseTime = actionRepository.findById(id).get().getTime();
         Action action = actionRepository.save(newAction);
-        System.out.println(actionRepository.getReferenceById(action.getId()));
         Long addTime = action.startTimer();
-        System.out.println("add time: " + addTime);
-        System.out.println("Old time " + dataBaseTime);
-        action.setTime(oldTime2 + addTime);
-        System.out.println(actionRepository.getReferenceById(action.getId()));
+        action.setTime(dataBaseTime + addTime);
         actionRepository.save(action);
         return new ResponseEntity<>(action, HttpStatus.CREATED);
     }
