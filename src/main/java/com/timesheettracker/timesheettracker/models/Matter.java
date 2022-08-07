@@ -1,6 +1,8 @@
 package com.timesheettracker.timesheettracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -14,9 +16,19 @@ public class Matter {
     private Long id;
     private String matterName;
 
+
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id")
+   // I took away @JsonIgnore
     private Client client;
+
+
+    @ManyToOne
+    @JoinColumn(name = "attorney_id", referencedColumnName = "id")
+    //@JsonIncludeProperties({"matters"})
+     @JsonIgnore
+    //@JsonIgnoreProperties("matters")
+    private Attorney attorney;
 
     @OneToMany(mappedBy = "matter", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -53,5 +65,21 @@ public class Matter {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Attorney getAttorney() {
+        return attorney;
+    }
+
+    public void setAttorney(Attorney attorney) {
+        this.attorney = attorney;
+    }
+
+    public Set<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(Set<Action> actions) {
+        this.actions = actions;
     }
 }

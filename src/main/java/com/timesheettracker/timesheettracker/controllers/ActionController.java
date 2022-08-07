@@ -2,6 +2,7 @@ package com.timesheettracker.timesheettracker.controllers;
 
 
 import com.timesheettracker.timesheettracker.models.Action;
+import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -40,6 +42,7 @@ public class ActionController {
                                              @PathVariable ("actionID") Long id ) throws InterruptedException {
         //if id already exist, add time to it
         Long dataBaseTime = actionRepository.findById(id).get().getTime();
+       // Long dataBaseTime = actionRepository.getReferenceById(id).getTime();
         Action action = actionRepository.save(newAction);
         Long addTime = action.startTimer();
         action.setTime(dataBaseTime + addTime);
@@ -59,9 +62,9 @@ public class ActionController {
     }
 
 
-    public Long getSqlTime(Long id) {
-        return actionRepository.getReferenceById(id).getTime();
-    }
+   // public Long getSqlTime(Long id) {
+//        return actionRepository.getReferenceById(id).getTime();
+//    }
 
 //    @PostMapping("/start/{id}")
 //    public ResponseEntity<?> addTime(@PathVariable Long id) throws InterruptedException {
@@ -79,6 +82,7 @@ public class ActionController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getMatterTime(@PathVariable Long id) {
 
+
         Optional<Action> maybeTime = actionRepository.findById(id);
 
         if (maybeTime.isEmpty()) {
@@ -87,12 +91,22 @@ public class ActionController {
         return new ResponseEntity<>(maybeTime.get(), HttpStatus.OK);
     }
 
-//    @PostMapping("/stop")
-//    public ResponseEntity<Action> stopTimer(@RequestBody Action newAction){
-//        Action action = actionRepository.save(newAction);
-//        action.stopTimer();
-//        return new ResponseEntity<>(action, HttpStatus.CREATED);
-//    }
+    @GetMapping("/")
+    public ResponseEntity<?> getAllActions() {
+        List <Action> actions = actionRepository.findAll();
+        return new ResponseEntity<>(actions, HttpStatus.OK);
+    }
+
+    @GetMapping("/matter/{matterId}")
+    public ResponseEntity<?> getActionByMatterId(@PathVariable ("matterId") Long id) {
+        List<Action>  actions = actionRepository.findAllByMatter_id(id);
+        String result = actions.get(0).getMatter().getClient().getCompanyName();
+        System.out.println(result);
+        return new ResponseEntity<>(actions, HttpStatus.OK);
+    }
+
+
+
 
 
 }

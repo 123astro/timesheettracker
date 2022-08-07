@@ -3,6 +3,8 @@ package com.timesheettracker.timesheettracker.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,14 +20,17 @@ public class Client {
     private String contactName;
     private String phoneNumber;
 
-    //clients
+    //Many clients to one attorney
     @ManyToOne
     @JoinColumn(name = "attorney_id", referencedColumnName = "id")
+    @JsonIgnore
+    //@JsonIncludeProperties("{name, billingRate}")
     private Attorney attorney;
 
-    //matters
+    //one client to many matters
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
     @JsonIgnore
+   // @JsonIgnoreProperties("client")
     private Set<Matter> matters;
 
 
@@ -41,13 +46,7 @@ public class Client {
         this.matters = matters;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public Long getId() {
         return id;
@@ -73,11 +72,27 @@ public class Client {
         this.contactName = contactName;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public Attorney getAttorney() {
         return attorney;
     }
 
     public void setAttorney(Attorney attorney) {
         this.attorney = attorney;
+    }
+
+    public Set<Matter> getMatters() {
+        return matters;
+    }
+
+    public void setMatters(Set<Matter> matters) {
+        this.matters = matters;
     }
 }

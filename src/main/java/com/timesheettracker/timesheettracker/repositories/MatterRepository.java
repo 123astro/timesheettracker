@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface MatterRepository extends JpaRepository<Matter, Long> {
    List<Matter> findAllByClient_id(Long id);
+   List<Matter> findAllByAttorney_id(Long id);
+   //add to list matters
+
 }

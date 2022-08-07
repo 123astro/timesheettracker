@@ -1,6 +1,8 @@
 package com.timesheettracker.timesheettracker.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -18,6 +20,11 @@ public class Attorney {
     @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Client> clients;
+
+    @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
+   // @JsonIgnore
+   // @JsonIgnoreProperties("{attorney}")
+    private Set<Matter> matters;
 
     public Attorney() {
     }
@@ -58,5 +65,13 @@ public class Attorney {
 
     public void setClients(Set<Client> clients) {
         this.clients = clients;
+    }
+
+    public Set<Matter> getMatters() {
+        return matters;
+    }
+
+    public void setMatters(Set<Matter> matters) {
+        this.matters = matters;
     }
 }
