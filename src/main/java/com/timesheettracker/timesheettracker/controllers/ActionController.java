@@ -2,6 +2,7 @@ package com.timesheettracker.timesheettracker.controllers;
 
 
 import com.timesheettracker.timesheettracker.models.Action;
+import com.timesheettracker.timesheettracker.models.Attorney;
 import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
@@ -37,15 +38,18 @@ public class ActionController {
     private ActionRepository actionRepository;
 
     //adds time to a matter {"actionName": "phone call",  "matter": { "id": 4 }}
-    @PostMapping("/start/actionID/{actionID}")
+    @PostMapping("/start/actionID/{actionID}/attorneyID/{attorneyID}")
     public ResponseEntity<?> startTimer(@RequestBody Action newAction,
-                                             @PathVariable ("actionID") Long id ) throws InterruptedException {
-        //if id already exist, add time to it
-        Long dataBaseTime = actionRepository.findById(id).get().getTime();
-       // Long dataBaseTime = actionRepository.getReferenceById(id).getTime();
+                                             @PathVariable ("actionID") Long id,
+                                        @PathVariable ("attorneyID") Long aId) throws InterruptedException {
+
         Action action = actionRepository.save(newAction);
+        Long dataBaseTime = actionRepository.findById(id).get().getTime();
         Long addTime = action.startTimer();
         action.setTime(dataBaseTime + addTime);
+        Optional<Attorney> maybeAttorney = attorneyRepository.findById(aId);
+        System.out.println(maybeAttorney);
+        action.setAttorney(maybeAttorney.get());
         actionRepository.save(action);
         return new ResponseEntity<>(action, HttpStatus.CREATED);
     }
@@ -97,6 +101,13 @@ public class ActionController {
         return new ResponseEntity<>(actions, HttpStatus.OK);
     }
 
+    @GetMapping("/attorney/{attorneyId}")
+    public ResponseEntity<?> getActionByAttorneyId(@PathVariable ("attorneyId") Long id) {
+        List<Action>  actions = actionRepository.findAllByAttorney_id(id);
+
+        return new ResponseEntity<>(actions, HttpStatus.OK);
+    }
+
     @GetMapping("/matter/{matterId}")
     public ResponseEntity<?> getActionByMatterId(@PathVariable ("matterId") Long id) {
         List<Action>  actions = actionRepository.findAllByMatter_id(id);
@@ -104,7 +115,6 @@ public class ActionController {
         System.out.println(result);
         return new ResponseEntity<>(actions, HttpStatus.OK);
     }
-
 
 
 

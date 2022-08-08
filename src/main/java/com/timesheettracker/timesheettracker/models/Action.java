@@ -1,4 +1,5 @@
 package com.timesheettracker.timesheettracker.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import org.springframework.util.StopWatch;
 
@@ -19,14 +20,34 @@ public class Action {
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
     private Matter matter;
 
+    //below added
+
+    @ManyToOne
+    @JoinColumn(name = "attorney_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Attorney attorney;
+
+    public Attorney getAttorney() {
+        return attorney;
+    }
+
+    public void setAttorney(Attorney attorney) {
+        this.attorney = attorney;
+    }
+
+
+
     public Action() {
     }
 
-    public Action(Long id, String actionName, Long time, Matter matter) {
+
+
+    public Action(Long id, String actionName, Long time, Matter matter, Attorney attorney) {
         this.id = id;
         this.actionName = actionName;
         this.time = time;
         this.matter = matter;
+        this.attorney = attorney;
     }
 
     public Long getId() {

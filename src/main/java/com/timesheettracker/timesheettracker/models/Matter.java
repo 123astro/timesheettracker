@@ -25,9 +25,7 @@ public class Matter {
 
     @ManyToOne
     @JoinColumn(name = "attorney_id", referencedColumnName = "id")
-    //@JsonIncludeProperties({"matters"})
      @JsonIgnore
-    //@JsonIgnoreProperties("matters")
     private Attorney attorney;
 
     @OneToMany(mappedBy = "matter", fetch = FetchType.LAZY)
