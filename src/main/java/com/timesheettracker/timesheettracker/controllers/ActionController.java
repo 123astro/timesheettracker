@@ -3,8 +3,6 @@ package com.timesheettracker.timesheettracker.controllers;
 
 import com.timesheettracker.timesheettracker.models.Action;
 import com.timesheettracker.timesheettracker.models.Attorney;
-import com.timesheettracker.timesheettracker.models.Client;
-import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
@@ -38,7 +36,7 @@ public class ActionController {
     private ActionRepository actionRepository;
 
     //adds time to a matter {"actionName": "phone call",  "matter": { "id": 4 }}
-    @PostMapping("/start/actionID/{actionID}/attorneyID/{attorneyID}")
+    @PostMapping("/actionID/{actionID}/attorneyID/{attorneyID}")
     public ResponseEntity<?> startTimer(@RequestBody Action newAction,
                                              @PathVariable ("actionID") Long id,
                                         @PathVariable ("attorneyID") Long aId) throws InterruptedException {
@@ -115,6 +113,13 @@ public class ActionController {
         System.out.println(result);
         return new ResponseEntity<>(actions, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAllActions(@PathVariable Long id) {
+        actionRepository.deleteById(id);
+        return new ResponseEntity<>( "Deleted", HttpStatus.OK);
+    }
+
 
 
 
