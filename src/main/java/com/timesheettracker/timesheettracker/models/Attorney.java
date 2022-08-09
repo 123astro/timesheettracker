@@ -21,10 +21,10 @@ public class Attorney {
     @JsonIgnore
     private Set<Client> clients;
 
-    @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
-   // @JsonIgnore
-   // @JsonIgnoreProperties("{attorney}")
-    private Set<Matter> matters;
+//    @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
+//   // @JsonIgnore
+//   // @JsonIgnoreProperties("{attorney}")
+//    private Set<Matter> matters;
 
     public Attorney() {
     }
@@ -67,11 +67,11 @@ public class Attorney {
         this.clients = clients;
     }
 
-    public Set<Matter> getMatters() {
-        return matters;
-    }
-
-    public void setMatters(Set<Matter> matters) {
-        this.matters = matters;
-    }
+//    public Set<Matter> getMatters() {
+//        return matters;
+//    }
+//
+//    public void setMatters(Set<Matter> matters) {
+//        this.matters = matters;
+//    }
 }

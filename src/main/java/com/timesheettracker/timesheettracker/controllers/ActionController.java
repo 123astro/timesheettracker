@@ -2,12 +2,8 @@ package com.timesheettracker.timesheettracker.controllers;
 
 
 import com.timesheettracker.timesheettracker.models.Action;
-import com.timesheettracker.timesheettracker.models.Attorney;
-import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
-import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
-import com.timesheettracker.timesheettracker.repositories.ClientRepository;
 import com.timesheettracker.timesheettracker.repositories.MatterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -27,13 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ActionController {
 
-
-    @Autowired
-    private AttorneyRepository attorneyRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
-
     @Autowired
     private MatterRepository matterRepository;
 
@@ -42,6 +30,7 @@ public class ActionController {
 
 
     //use action id to add time (timer method = 3 seconds) to a current action
+    //maybe a pause later
     @PostMapping("/actionID/{actionID}")
     public ResponseEntity<?> addTimeToAction(@PathVariable ("actionID") Long id) throws InterruptedException {
         Optional<Action> existingAction = actionRepository.findById(id);
@@ -51,7 +40,7 @@ public class ActionController {
         }
         Long dataBaseTime = existingAction.get().getTime();
         System.out.println("dataBaseTime: " +dataBaseTime);
-        Long newTime = (startTimer2() + dataBaseTime);
+        Long newTime = (startTimer2() + dataBaseTime); //starting/sopping timer adding to time in database
         System.out.println(newTime);
         existingAction.get().setTime(newTime);
         actionRepository.save(existingAction.get());

@@ -14,36 +14,19 @@ public class Action {
     private Long id;
     private String actionName;
     public Long time = 0L;
-    //private static StopWatch stopWatch = new StopWatch();
 
     @ManyToOne
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
     private Matter matter;
 
-    //below added
-
-    @ManyToOne
-    @JoinColumn(name = "attorney_id", referencedColumnName = "id")
-    @JsonIgnore
-    private Attorney attorney;
-
-    public Attorney getAttorney() {
-        return attorney;
-    }
-
-    public void setAttorney(Attorney attorney) {
-        this.attorney = attorney;
-    }
-
     public Action() {
     }
 
-    public Action(Long id, String actionName, Long time, Matter matter, Attorney attorney) {
+    public Action(Long id, String actionName, Long time, Matter matter) {
         this.id = id;
         this.actionName = actionName;
         this.time = time;
         this.matter = matter;
-        this.attorney = attorney;
     }
 
     public Long getId() {
@@ -68,7 +51,6 @@ public class Action {
 
     public void setTime(Long time) {
         this.time = time;
-        //this.time += time;
     }
 
     public Matter getMatter() {
