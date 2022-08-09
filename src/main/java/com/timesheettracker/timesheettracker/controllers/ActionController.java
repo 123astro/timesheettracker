@@ -54,6 +54,7 @@ public class ActionController {
         Long newTime = (startTimer2() + dataBaseTime);
         System.out.println(newTime);
         existingAction.get().setTime(newTime);
+        actionRepository.save(existingAction.get());
         return new ResponseEntity<>(newTime, HttpStatus.CREATED);
     }
 
