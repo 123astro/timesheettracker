@@ -58,7 +58,7 @@ public class ActionController {
     }
 
     //matter is needed to add action.
-    @PostMapping("/{matterId}")
+    @PostMapping("/matterId/{matterId}")
     public ResponseEntity<?> createNewAction(@PathVariable("matterId") Long id, @RequestBody Action newAction) throws InterruptedException {
         Optional<Matter> maybeMatter = matterRepository.findById(id);
         if (maybeMatter.isEmpty()) {
