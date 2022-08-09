@@ -10,6 +10,7 @@ import java.util.List;
 public interface ActionRepository extends JpaRepository <Action, Long> {
     List<Action> findAllByMatter_id(Long id);
     List<Action> findAllByAttorney_id(Long id);
-
+    List<Action> findAllByMatter_Client_Attorney_id(Long id);
+  // List<Action> findAllByClient_Attorney_id(Long id);
 }
 

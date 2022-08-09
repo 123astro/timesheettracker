@@ -3,6 +3,8 @@ package com.timesheettracker.timesheettracker.controllers;
 
 import com.timesheettracker.timesheettracker.models.Action;
 import com.timesheettracker.timesheettracker.models.Attorney;
+import com.timesheettracker.timesheettracker.models.Client;
+import com.timesheettracker.timesheettracker.models.Matter;
 import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
@@ -10,10 +12,13 @@ import com.timesheettracker.timesheettracker.repositories.MatterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @CrossOrigin
@@ -35,58 +40,40 @@ public class ActionController {
     @Autowired
     private ActionRepository actionRepository;
 
-    //adds time to a matter {"actionName": "phone call",  "matter": { "id": 4 }}
-    @PostMapping("/actionID/{actionID}/attorneyID/{attorneyID}")
-    public ResponseEntity<?> startTimer(@RequestBody Action newAction,
-                                             @PathVariable ("actionID") Long id,
-                                        @PathVariable ("attorneyID") Long aId) throws InterruptedException {
 
+    //use action id to add time (timer method = 3 seconds) to a current action
+    @PostMapping("/actionID/{actionID}")
+    public ResponseEntity<?> addTimeToAction(@PathVariable ("actionID") Long id) throws InterruptedException {
+        Optional<Action> existingAction = actionRepository.findById(id);
+        System.out.println(existingAction);
+        if (existingAction.isEmpty()) {
+            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
+        }
+        Long dataBaseTime = existingAction.get().getTime();
+        System.out.println("dataBaseTime: " +dataBaseTime);
+        Long newTime = (startTimer2() + dataBaseTime);
+        System.out.println(newTime);
+        existingAction.get().setTime(newTime);
+        return new ResponseEntity<>(newTime, HttpStatus.CREATED);
+    }
+
+    //matter is needed to add action.
+    @PostMapping("/{matterId}")
+    public ResponseEntity<?> createNewAction(@PathVariable("matterId") Long id, @RequestBody Action newAction) throws InterruptedException {
+        Optional<Matter> maybeMatter = matterRepository.findById(id);
+        if (maybeMatter.isEmpty()) {
+            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
+        }
+        newAction.setMatter(maybeMatter.get());
         Action action = actionRepository.save(newAction);
-        Long dataBaseTime = actionRepository.findById(id).get().getTime();
-        Long addTime = action.startTimer();
-        action.setTime(dataBaseTime + addTime);
-        Optional<Attorney> maybeAttorney = attorneyRepository.findById(aId);
-        System.out.println(maybeAttorney);
-        action.setAttorney(maybeAttorney.get());
+        action.startTimer();
         actionRepository.save(action);
-        return new ResponseEntity<>(action, HttpStatus.CREATED);
+        return new ResponseEntity<>(action, HttpStatus.OK);
     }
-
-
-    @PostMapping("/start")
-    public ResponseEntity<Action> startTimer(@RequestBody Action newAction) throws InterruptedException {
-        //if id already exist, add time to it
-        Action action = actionRepository.save(newAction);
-        Long addTime = action.startTimer();
-        System.out.println("add time: " + addTime);
-        actionRepository.save(newAction);
-        return new ResponseEntity<>(action, HttpStatus.CREATED);
-    }
-
-
-   // public Long getSqlTime(Long id) {
-//        return actionRepository.getReferenceById(id).getTime();
-//    }
-
-//    @PostMapping("/start/{id}")
-//    public ResponseEntity<?> addTime(@PathVariable Long id) throws InterruptedException {
-//        Action action = new Action();
-//        Long mysqlTime = actionRepository.getReferenceById(id).getTime();
-//        System.out.println(mysqlTime);
-//        action.startTimer();
-//        System.out.println(action.getTime());
-//        actionRepository.getReferenceById(id).setTime((mysqlTime + action.getTime()));
-//        actionRepository.save(action);
-//        return new ResponseEntity<>(action, HttpStatus.CREATED);
-//    }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getMatterTime(@PathVariable Long id) {
-
-
         Optional<Action> maybeTime = actionRepository.findById(id);
-
         if (maybeTime.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
         }
@@ -101,8 +88,7 @@ public class ActionController {
 
     @GetMapping("/attorney/{attorneyId}")
     public ResponseEntity<?> getActionByAttorneyId(@PathVariable ("attorneyId") Long id) {
-        List<Action>  actions = actionRepository.findAllByAttorney_id(id);
-
+        List<Action>  actions = actionRepository.findAllByMatter_Client_Attorney_id(id);
         return new ResponseEntity<>(actions, HttpStatus.OK);
     }
 
@@ -120,7 +106,17 @@ public class ActionController {
         return new ResponseEntity<>( "Deleted", HttpStatus.OK);
     }
 
-
+    public Long startTimer2() throws InterruptedException {
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        System.out.println("Timer Started");
+        TimeUnit.SECONDS.sleep(3);
+        stopWatch.stop();
+        System.out.println("Timer Ended");
+        Long timer = (long) stopWatch.getTotalTimeSeconds();
+        System.out.println(stopWatch.getTotalTimeSeconds());
+        return timer;
+    }
 
 
 

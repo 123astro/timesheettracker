@@ -35,12 +35,8 @@ public class Action {
         this.attorney = attorney;
     }
 
-
-
     public Action() {
     }
-
-
 
     public Action(Long id, String actionName, Long time, Matter matter, Attorney attorney) {
         this.id = id;
@@ -105,11 +101,5 @@ public class Action {
                 ", \"matter\":" + matter +
                 '}';
     }
-
-    //    public void stopTimer(){
-//        StopWatch stopWatch = new StopWatch();
-//        stopWatch.stop();
-//        System.out.println(stopWatch.getTotalTimeMillis());
-//    }
 
 }
