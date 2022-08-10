@@ -57,6 +57,12 @@ public class ClientController {
         return new ResponseEntity<>(clients, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{id}/deleteClient")
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        clientRepository.deleteById(id);
+        return new ResponseEntity<>( "Deleted", HttpStatus.OK);
+    }
+
 
     // ADD CODE =>  IF client already exist, attorney can not use that client.
 

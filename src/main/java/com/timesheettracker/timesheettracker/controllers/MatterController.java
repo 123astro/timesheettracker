@@ -31,7 +31,7 @@ public class MatterController {
     private AttorneyRepository attorneyRepository;
 
 
-    @PostMapping("/client/{clientID}")
+    @PostMapping("/client/{clientID}/addMatter")
     public ResponseEntity<?> createNewMatterWithClient(@PathVariable("clientID") Long id,
                                                        @RequestBody Matter newMatter) {
         Optional<Client> maybeClient = clientRepository.findById(id);
