@@ -1,6 +1,4 @@
 package com.timesheettracker.timesheettracker.models;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.timesheettracker.timesheettracker.repositories.ActionRepository;
 import org.springframework.util.StopWatch;
 
 import javax.persistence.*;
@@ -83,5 +81,4 @@ public class Action {
                 ", \"matter\":" + matter +
                 '}';
     }
-
 }

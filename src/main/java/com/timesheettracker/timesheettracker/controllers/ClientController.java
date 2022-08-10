@@ -1,6 +1,5 @@
 package com.timesheettracker.timesheettracker.controllers;
 
-
 import com.timesheettracker.timesheettracker.models.Attorney;
 import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
@@ -26,7 +25,7 @@ public class ClientController {
     @Autowired
     private AttorneyRepository attorneyRepository;
 
-    @PostMapping("/{attorneyID}")
+    @PostMapping("/{attorneyID}/addClient")
     public ResponseEntity<?> createNewClient(@PathVariable("attorneyID") Long id, @RequestBody Client newClient) {
         Optional<Attorney> maybeAttorney = attorneyRepository.findById(id);
         if (maybeAttorney.isEmpty()) {
@@ -50,7 +49,6 @@ public class ClientController {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(maybeClient.get(), HttpStatus.OK);
-
     }
 
     @GetMapping("/attorney/{attorneyId}")

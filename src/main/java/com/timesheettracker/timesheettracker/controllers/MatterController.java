@@ -33,7 +33,7 @@ public class MatterController {
 
     @PostMapping("/client/{clientID}")
     public ResponseEntity<?> createNewMatterWithClient(@PathVariable("clientID") Long id,
-                                             @RequestBody Matter newMatter){
+                                                       @RequestBody Matter newMatter) {
         Optional<Client> maybeClient = clientRepository.findById(id);
         if (maybeClient.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
@@ -50,7 +50,7 @@ public class MatterController {
     }
 
     @GetMapping("/{matterID}")
-    public ResponseEntity<?> getClient(@PathVariable("matterID") Long id){
+    public ResponseEntity<?> getClient(@PathVariable("matterID") Long id) {
         Optional<Matter> matters = matterRepository.findById(id);
         if (matters.isEmpty()) {
             return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
@@ -59,14 +59,14 @@ public class MatterController {
     }
 
     @GetMapping("/client/{clientID}")
-    public ResponseEntity<?> getMatterFromClient(@PathVariable("clientID") Long id){
-       List<Matter>  matters =  matterRepository.findAllByClient_id(id);
+    public ResponseEntity<?> getMatterFromClient(@PathVariable("clientID") Long id) {
+        List<Matter> matters = matterRepository.findAllByClient_id(id);
         return new ResponseEntity<>(matters, HttpStatus.OK);
     }
 
     @GetMapping("/attorney/{attorneyID}")
-    public ResponseEntity<?> getMattersForAttorney(@PathVariable("attorneyID") Long id){
-        List<Matter>  attorneyMatters  = matterRepository.findAllByClient_Attorney_id(id);
+    public ResponseEntity<?> getMattersForAttorney(@PathVariable("attorneyID") Long id) {
+        List<Matter> attorneyMatters = matterRepository.findAllByClient_Attorney_id(id);
         return new ResponseEntity<>(attorneyMatters, HttpStatus.OK);
     }
 

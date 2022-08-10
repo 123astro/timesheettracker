@@ -39,8 +39,6 @@ public class Client {
         this.matters = matters;
     }
 
-
-
     public Long getId() {
         return id;
     }

@@ -1,8 +1,6 @@
 package com.timesheettracker.timesheettracker.controllers;
 
-
 import com.timesheettracker.timesheettracker.models.Attorney;
-import com.timesheettracker.timesheettracker.models.Client;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +32,6 @@ public class AttorneyController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers(){
         List<Attorney> users = attorneyRepository.findAll();
@@ -51,5 +48,4 @@ public class AttorneyController {
         }
         return new ResponseEntity<>(maybeUser.get(), HttpStatus.OK);
     }
-
 }
