@@ -2,6 +2,8 @@ package com.timesheettracker.timesheettracker.models;
 import org.springframework.util.StopWatch;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 @Entity
@@ -12,6 +14,8 @@ public class Action {
     private Long id;
     private String actionName;
     public Long time = 0L;
+    public Instant start;
+    public Instant end;
 
     @ManyToOne
     @JoinColumn(name = "matter_id", referencedColumnName = "id")
@@ -20,10 +24,12 @@ public class Action {
     public Action() {
     }
 
-    public Action(Long id, String actionName, Long time, Matter matter) {
+    public Action(Long id, String actionName, Long time, Instant start, Instant end, Matter matter) {
         this.id = id;
         this.actionName = actionName;
         this.time = time;
+        this.start = start;
+        this.end = end;
         this.matter = matter;
     }
 
@@ -51,6 +57,22 @@ public class Action {
         this.time = time;
     }
 
+    public Instant getStart() {
+        return start;
+    }
+
+    public void setStart(Instant start) {
+        this.start = start;
+    }
+
+    public Instant getEnd() {
+        return end;
+    }
+
+    public void setEnd(Instant end) {
+        this.end = end;
+    }
+
     public Matter getMatter() {
         return matter;
     }
@@ -59,17 +81,29 @@ public class Action {
         this.matter = matter;
     }
 
-    public Long startTimer() throws InterruptedException {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        System.out.println("Timer Started");
-        TimeUnit.SECONDS.sleep(3);
-        stopWatch.stop();
-        System.out.println("Timer Ended");
-        Long timer = (long) stopWatch.getTotalTimeSeconds();
-        setTime(timer);
-        System.out.println(stopWatch.getTotalTimeSeconds());
-        return timer;
+
+    public Instant startTimer() throws InterruptedException {
+        this.start = Instant.now();
+        System.out.println(start);
+        return start;
+    }
+
+    public Instant stopTimer() throws InterruptedException {
+        this.end = Instant.now();
+        System.out.println(end);
+        return end;
+    }
+
+    public long displayCurrentTime() {
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println(timeElapsed.getSeconds()/60);
+        long timeInMin = timeElapsed.getSeconds()/60;
+        if ( timeInMin > 0 && timeInMin < 6) {
+            System.out.println("Multiplier : .1");
+            System.out.println("Number of minutes billed : " + 60 * .1);
+        }
+        System.out.println("Time taken: " + timeElapsed.getSeconds() + " seconds");
+        return timeInMin;
     }
 
     @Override
