@@ -7,13 +7,13 @@ import com.timesheettracker.timesheettracker.repositories.MatterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+
 
 
 @CrossOrigin
@@ -23,43 +23,13 @@ import java.util.concurrent.TimeUnit;
 public class ActionController {
 
     public Long id_;
-    public Action action;
+    private static final String PATTERN_FORMAT = "dd.MM.yyyy hh.mm.ss";
 
     @Autowired
     private MatterRepository matterRepository;
 
     @Autowired
     private ActionRepository actionRepository;
-
-    //use action id to add time (timer method = 3 seconds) to a current action
-    //maybe a pause later
-    @PostMapping("/actionID/{actionID}")
-    public ResponseEntity<?> addTimeToAction(@PathVariable("actionID") Long id) throws InterruptedException {
-        Optional<Action> existingAction = actionRepository.findById(id);
-        System.out.println(existingAction);
-        if (existingAction.isEmpty()) {
-            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
-        }
-        Long dataBaseTime = existingAction.get().getTime();
-        System.out.println("dataBaseTime: " + dataBaseTime);
-        Long newTime = (startTimer1() + dataBaseTime); //starting/sopping timer adding to time in database
-        System.out.println(newTime);
-        existingAction.get().setTime(newTime);
-        actionRepository.save(existingAction.get());
-        return new ResponseEntity<>(newTime, HttpStatus.CREATED);
-    }
-
-    public Long startTimer1() throws InterruptedException {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start();
-        System.out.println("Timer Started");
-        TimeUnit.SECONDS.sleep(3);
-        stopWatch.stop();
-        System.out.println("Timer Ended");
-        Long timer = (long) stopWatch.getTotalTimeSeconds();
-        System.out.println(stopWatch.getTotalTimeSeconds());
-        return timer;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getMatterTime(@PathVariable Long id) {
@@ -96,7 +66,6 @@ public class ActionController {
         return new ResponseEntity<>("Deleted", HttpStatus.OK);
     }
 
-
     @PostMapping("/start/{matterId}/{actionName}")
     public ResponseEntity<?> newStartTimer(@PathVariable("matterId") Long id,
                                            @PathVariable("actionName") String actionName,
@@ -115,14 +84,59 @@ public class ActionController {
         return new ResponseEntity<>("Timer Started", HttpStatus.OK);
     }
 
+
     @PostMapping("/stop")
     public ResponseEntity<?> newStopTimer() throws InterruptedException {
         Instant res = actionRepository.getReferenceById(id_).stopTimer();
+        formatTime(res);
         actionRepository.getReferenceById(id_).setEnd(res);
         Long duration = actionRepository.getReferenceById(id_).displayCurrentTime();
-        System.out.println(duration);
+        System.out.println("Duration: " + duration);
         actionRepository.getReferenceById(id_).setTime(duration);
         actionRepository.save(actionRepository.getReferenceById(id_));
         return new ResponseEntity<>("Timer Stopped", HttpStatus.OK);
     }
+
+    public String formatTime(Instant res) {
+        DateTimeFormatter formatter = DateTimeFormatter.RFC_1123_DATE_TIME
+                .withZone(ZoneId.systemDefault());
+        String formattedInstant = formatter.format(res);
+        System.out.println(formattedInstant);
+        return formattedInstant;
+    }
 }
+
+
+
+
+
+    //use action id to add time (timer method = 3 seconds) to a current action
+    //maybe a pause later
+//    @PostMapping("/actionID/{actionID}")
+//    public ResponseEntity<?> addTimeToAction(@PathVariable("actionID") Long id) throws InterruptedException {
+//        Optional<Action> existingAction = actionRepository.findById(id);
+//        System.out.println(existingAction);
+//        if (existingAction.isEmpty()) {
+//            return new ResponseEntity<>(("Not Found"), HttpStatus.NOT_FOUND);
+//        }
+//        Long dataBaseTime = existingAction.get().getTime();
+//        System.out.println("dataBaseTime: " + dataBaseTime);
+//        Long newTime = (startTimer1() + dataBaseTime); //starting/sopping timer adding to time in database
+//        System.out.println(newTime);
+//        existingAction.get().setTime(newTime);
+//        actionRepository.save(existingAction.get());
+//        return new ResponseEntity<>(newTime, HttpStatus.CREATED);
+//    }
+//
+//    public Long startTimer1() throws InterruptedException {
+//        StopWatch stopWatch = new StopWatch();
+//        stopWatch.start();
+//        System.out.println("Timer Started");
+//        TimeUnit.SECONDS.sleep(3);
+//        stopWatch.stop();
+//        System.out.println("Timer Ended");
+//        Long timer = (long) stopWatch.getTotalTimeSeconds();
+//        System.out.println(stopWatch.getTotalTimeSeconds());
+//        return timer;
+//    }
+
