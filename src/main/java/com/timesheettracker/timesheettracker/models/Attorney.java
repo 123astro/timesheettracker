@@ -13,19 +13,21 @@ public class Attorney {
     private Long id;
     private String name;
     private Float billingRate;
+    private String email;
 
     // One attorney with many clients
     @OneToMany(mappedBy = "attorney", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Client> clients;
 
-
     public Attorney() {
     }
 
-    public Attorney(String name, Float billingRate, Set<Client> clients) {
+    public Attorney(Long id, String name, Float billingRate, String email, Set<Client> clients) {
+        this.id = id;
         this.name = name;
         this.billingRate = billingRate;
+        this.email = email;
         this.clients = clients;
     }
 
@@ -53,6 +55,14 @@ public class Attorney {
         this.billingRate = billingRate;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Set<Client> getClients() {
         return clients;
     }
@@ -60,5 +70,4 @@ public class Attorney {
     public void setClients(Set<Client> clients) {
         this.clients = clients;
     }
-
 }
