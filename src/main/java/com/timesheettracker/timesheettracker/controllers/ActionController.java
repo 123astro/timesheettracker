@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class ActionController {
 
-    public Long id_;
+    public Long id;
     private static final String PATTERN_FORMAT = "dd.MM.yyyy hh.mm.ss";
 
     @Autowired
@@ -79,7 +79,7 @@ public class ActionController {
         action.setActionName(actionName);
         Instant res = action.startTimer();
         action.setStart(res);
-        this.id_ = action.getId();
+        this.id = action.getId();
         actionRepository.save(action);
         return new ResponseEntity<>("Timer Started", HttpStatus.OK);
     }
@@ -87,13 +87,17 @@ public class ActionController {
 
     @PostMapping("/stop")
     public ResponseEntity<?> newStopTimer() throws InterruptedException {
-        Instant res = actionRepository.getReferenceById(id_).stopTimer();
+        if( this.id == null){
+            return new ResponseEntity<>("No active id", HttpStatus.NOT_FOUND);
+        }
+        Instant res = actionRepository.getReferenceById(id).stopTimer();
         formatTime(res);
-        actionRepository.getReferenceById(id_).setEnd(res);
-        Long duration = actionRepository.getReferenceById(id_).displayCurrentTime();
+        actionRepository.getReferenceById(id).setEnd(res);
+        Long duration = actionRepository.getReferenceById(id).displayCurrentTime();
         System.out.println("Duration: " + duration);
-        actionRepository.getReferenceById(id_).setTime(duration);
-        actionRepository.save(actionRepository.getReferenceById(id_));
+        actionRepository.getReferenceById(id).setTime(duration);
+        actionRepository.save(actionRepository.getReferenceById(id));
+        this.id= null;
         return new ResponseEntity<>("Timer Stopped", HttpStatus.OK);
     }
 

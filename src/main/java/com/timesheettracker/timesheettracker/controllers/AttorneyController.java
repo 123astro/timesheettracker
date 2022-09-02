@@ -1,5 +1,4 @@
 package com.timesheettracker.timesheettracker.controllers;
-
 import com.timesheettracker.timesheettracker.models.Attorney;
 import com.timesheettracker.timesheettracker.repositories.AttorneyRepository;
 import com.timesheettracker.timesheettracker.repositories.ClientRepository;
